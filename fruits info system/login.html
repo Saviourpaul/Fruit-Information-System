@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login/Signup</title>
+    <link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f0f2f5;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-image: url('https://thumbs.dreamstime.com/z/red-apple-leaf-slice-white-background-29914331.jpg?ct=jpeg');
+            background-size: cover;
+            background-position: center;
+        }
+
+        .container {
+            background-color: rgba(255, 255, 255, 0.9);
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+            overflow: hidden;
+            width: 350px;
+        }
+
+        .swiper-container {
+            width: 100%;
+            height: 450px;
+        }
+
+        .swiper-slide {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        form {
+            width: 100%;
+            padding: 30px;
+        }
+
+        h2 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 20px;
+            font-size: 24px;
+        }
+
+        .input-group {
+            position: relative;
+            margin-bottom: 20px;
+        }
+
+        .input-group i {
+            position: absolute;
+            left: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #aaa;
+        }
+
+        input {
+            width: 100%;
+            padding: 12px 12px 12px 35px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            box-sizing: border-box;
+            transition: all 0.3s ease;
+            font-size: 14px;
+        }
+
+        input:focus {
+            border-color: #4285f4;
+            box-shadow: 0 0 0 2px rgba(66, 133, 244, 0.2);
+            outline: none;
+        }
+
+        button {
+            width: 100%;
+            padding: 12px;
+            background-color: #4285f4;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 16px;
+            font-weight: bold;
+        }
+
+        button:hover {
+            background-color: #357ae8;
+            transform: translateY(-2px);
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+        }
+
+        .google-btn {
+            background-color: #fff;
+            color: #757575;
+            border: 1px solid #ddd;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 10px;
+            margin-top: 15px;
+        }
+
+        .google-btn:hover {
+            background-color: #f1f3f4;
+        }
+
+        .google-icon {
+            width: 18px;
+            height: 18px;
+        }
+
+        .swiper-pagination {
+            bottom: 10px;
+        }
+
+        .swiper-pagination-bullet {
+            width: 10px;
+            height: 10px;
+            background-color: #4285f4;
+            opacity: 0.5;
+        }
+
+        .swiper-pagination-bullet-active {
+            opacity: 1;
+        }
+
+        .form-footer {
+            text-align: center;
+            margin-top: 20px;
+            font-size: 14px;
+            color: #666;
+        }
+
+        .form-footer a {
+            color: #4285f4;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        .form-footer a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="swiper-container">
+            <div class="swiper-wrapper">
+                <div class="swiper-slide">
+                    <form id="loginForm">
+                        <h2><i class="fas fa-sign-in-alt"></i> Login</h2>
+                        <div class="input-group">
+                            <i class="fas fa-envelope"></i>
+                            <input type="email" id="loginEmail" placeholder="Email" required>
+                        </div>
+                        <div class="input-group">
+                            <i class="fas fa-lock"></i>
+                            <input type="password" id="loginPassword" placeholder="Password" required>
+                        </div>
+                        <button type="submit">Login</button>
+                        <button type="button" id="loginWithGoogle" class="google-btn">
+                            <img src="./google.png" alt="Google logo" class="google-icon">
+                            Login with Google
+                        </button>
+                        <div class="form-footer">
+                            Don't have an account? <a href="#" class="swiper-next">Sign Up</a>
+                        </div>
+                    </form>
+                </div>
+                <div class="swiper-slide">
+                    <form id="signupForm">
+                        <h2><i class="fas fa-user-plus"></i> Sign Up</h2>
+                        <div class="input-group">
+                            <i class="fas fa-envelope"></i>
+                            <input type="email" id="signupEmail" placeholder="Email" required>
+                        </div>
+                        <div class="input-group">
+                            <i class="fas fa-lock"></i>
+                            <input type="password" id="signupPassword" placeholder="Password" required>
+                        </div>
+                        <button type="submit">Sign Up</button>
+                        <button type="button" id="signupWithGoogle" class="google-btn">
+                            <img src="./google.png" alt="Google logo" class="google-icon">
+                            Sign Up with Google
+                        </button>
+                        <div class="form-footer">
+                            Already have an account? <a href="#" class="swiper-prev">Login</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <div class="swiper-pagination"></div>
+        </div>
+    </div>
+
+    <script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
+    <script>
+        // Initialize Firebase
+        const firebaseConfig = {
+            apiKey: "AIzaSyDeNp8nouL_L9zA5KBeimwIzyS2kFNvsg0",
+            authDomain: "unique-phc.firebaseapp.com",
+            projectId: "unique-phc",
+            storageBucket: "unique-phc.firebasestorage.app",
+            messagingSenderId: "940374562457",
+            appId: "1:940374562457:web:76bfe5450b58b5838a8a08",
+            measurementId: "G-FNNEEGG5D3"
+        };
+        firebase.initializeApp(firebaseConfig);
+
+        // Initialize Swiper
+        const swiper = new Swiper('.swiper-container', {
+            pagination: {
+                el: '.swiper-pagination',
+                clickable: true,
+            },
+        });
+
+        // Swiper navigation
+        document.querySelector('.swiper-next').addEventListener('click', (e) => {
+            e.preventDefault();
+            swiper.slideNext();
+        });
+        document.querySelector('.swiper-prev').addEventListener('click', (e) => {
+            e.preventDefault();
+            swiper.slidePrev();
+        });
+
+        // Firebase auth
+        const auth = firebase.auth();
+
+        // Login form submission
+        document.getElementById('loginForm').addEventListener('submit', (e) => {
+            e.preventDefault();
+            const email = document.getElementById('loginEmail').value;
+            const password = document.getElementById('loginPassword').value;
+            auth.signInWithEmailAndPassword(email, password)
+                .then((userCredential) => {
+                    // Redirect to dashboard
+                    window.location.href = 'dashboard.html';
+                })
+                .catch((error) => {
+                    alert('Login failed: ' + error.message);
+                });
+        });
+
+        // Signup form submission
+        document.getElementById('signupForm').addEventListener('submit', (e) => {
+            e.preventDefault();
+            const email = document.getElementById('signupEmail').value;
+            const password = document.getElementById('signupPassword').value;
+            auth.createUserWithEmailAndPassword(email, password)
+                .then((userCredential) => {
+                    // Redirect to dashboard
+                    window.location.href = 'dashboard.html';
+                })
+                .catch((error) => {
+                    alert('Signup failed: ' + error.message);
+                });
+        });
+
+        // Google Sign In
+        const googleProvider = new firebase.auth.GoogleAuthProvider();
+
+        document.getElementById('loginWithGoogle').addEventListener('click', () => {
+            auth.signInWithPopup(googleProvider)
+                .then((result) => {
+                    // Redirect to dashboard
+                    window.location.href = 'dashboard.html';
+                }).catch((error) => {
+                    alert('Google login failed: ' + error.message);
+                });
+        });
+
+        document.getElementById('signupWithGoogle').addEventListener('click', () => {
+            auth.signInWithPopup(googleProvider)
+                .then((result) => {
+                    // Redirect to dashboard
+                    window.location.href = 'dashboard.html';
+                }).catch((error) => {
+                    alert('Google signup failed: ' + error.message);
+                });
+        });
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,807 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>FruitEat - Enhanced Dashboard</title>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+    <style>
+      :root {
+        --primary-color: #ff6b00;
+        --secondary-color: #ffa559;
+        --text-color: #333;
+        --bg-color: #f0f0f0;
+        --card-bg: #ffffff;
+        --shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      }
+
+      body {
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+        margin: 0;
+        padding: 0;
+        background-color: var(--bg-color);
+        color: var(--text-color);
+      }
+
+      .app-container {
+        display: flex;
+        min-height: 100vh;
+      }
+
+      .sidebar {
+        width: 250px;
+        background-color: var(--card-bg);
+        padding: 20px;
+        box-shadow: var(--shadow);
+        transition: all 0.3s ease;
+      }
+
+      .main-content {
+        flex-grow: 1;
+        padding: 20px;
+        transition: all 0.3s ease;
+      }
+
+      .right-sidebar {
+        width: 300px;
+        background-color: var(--card-bg);
+        padding: 20px;
+        box-shadow: var(--shadow);
+      }
+
+      header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 20px;
+        background-color: var(--card-bg);
+        padding: 10px 20px;
+        border-radius: 10px;
+        box-shadow: var(--shadow);
+      }
+
+      .logo {
+        font-size: 28px;
+        font-weight: bold;
+        color: var(--primary-color);
+        margin-bottom: 30px;
+      }
+
+      .nav-item {
+        display: flex;
+        align-items: center;
+        padding: 12px;
+        color: var(--text-color);
+        text-decoration: none;
+        margin-bottom: 10px;
+        border-radius: 8px;
+        transition: all 0.3s ease;
+      }
+
+      .nav-item:hover {
+        background-color: var(--secondary-color);
+        color: white;
+      }
+
+      .nav-item.active {
+        background-color: var(--primary-color);
+        color: white;
+      }
+
+      .icon {
+        width: 24px;
+        height: 24px;
+        margin-right: 15px;
+      }
+
+      input[type="search"] {
+        padding: 12px;
+        border: 2px solid var(--secondary-color);
+        border-radius: 25px;
+        width: 300px;
+        font-size: 16px;
+        transition: all 0.3s ease;
+      }
+
+      input[type="search"]:focus {
+        outline: none;
+        border-color: var(--primary-color);
+        box-shadow: 0 0 5px rgba(255, 107, 0, 0.5);
+      }
+
+      .header-icons button {
+        background: none;
+        border: none;
+        cursor: pointer;
+        font-size: 20px;
+        color: var(--text-color);
+        margin-left: 15px;
+        transition: color 0.3s ease;
+      }
+
+      .header-icons button:hover {
+        color: var(--primary-color);
+      }
+
+      .balance-card,
+      .cart-items {
+        background-color: var(--card-bg);
+        border-radius: 10px;
+        padding: 20px;
+        margin-bottom: 20px;
+        box-shadow: var(--shadow);
+      }
+
+      .balance-amount {
+        font-size: 32px;
+        font-weight: bold;
+        color: var(--primary-color);
+        margin-bottom: 15px;
+      }
+
+      .balance-actions {
+        display: flex;
+        justify-content: space-between;
+      }
+
+      .balance-actions button,
+      .checkout-button {
+        padding: 12px 24px;
+        background-color: var(--primary-color);
+        color: white;
+        border: none;
+        border-radius: 25px;
+        cursor: pointer;
+        font-size: 16px;
+        transition: all 0.3s ease;
+      }
+
+      .balance-actions button:hover,
+      .checkout-button:hover {
+        background-color: var(--secondary-color);
+        transform: translateY(-2px);
+      }
+
+      .cart-item {
+        display: flex;
+        align-items: center;
+        margin-bottom: 15px;
+        background-color: #f9f9f9;
+        padding: 10px;
+        border-radius: 8px;
+        transition: all 0.3s ease;
+      }
+
+      .cart-item:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+      }
+
+      .cart-item img {
+        width: 60px;
+        height: 60px;
+        object-fit: cover;
+        margin-right: 15px;
+        border-radius: 8px;
+      }
+
+      .modal {
+        display: none;
+        position: fixed;
+        z-index: 1000;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.5);
+        animation: fadeIn 0.3s ease;
+      }
+
+      @keyframes fadeIn {
+        from {
+          opacity: 0;
+        }
+        to {
+          opacity: 1;
+        }
+      }
+
+      .modal-content {
+        background-color: var(--card-bg);
+        margin: 15% auto;
+        padding: 30px;
+        border: 1px solid #888;
+        width: 400px;
+        border-radius: 10px;
+        box-shadow: var(--shadow);
+        animation: slideIn 0.3s ease;
+      }
+
+      @keyframes slideIn {
+        from {
+          transform: translateY(-50px);
+          opacity: 0;
+        }
+        to {
+          transform: translateY(0);
+          opacity: 1;
+        }
+      }
+
+      .close-sidebar,
+      .open-sidebar {
+        display: none;
+        background: none;
+        border: none;
+        font-size: 24px;
+        cursor: pointer;
+        color: var(--text-color);
+      }
+
+      .categories {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 15px;
+        margin-bottom: 30px;
+      }
+
+      .category {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        padding: 15px;
+        background-color: var(--card-bg);
+        border-radius: 10px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+      }
+
+      .category:hover {
+        transform: translateY(-5px);
+        box-shadow: var(--shadow);
+      }
+
+      .category span:first-child {
+        font-size: 32px;
+        margin-bottom: 10px;
+      }
+
+      .fruits {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+        gap: 20px;
+      }
+
+      .fruit-card {
+        background-color: var(--card-bg);
+        border-radius: 10px;
+        padding: 20px;
+        text-align: center;
+        box-shadow: var(--shadow);
+        transition: all 0.3s ease;
+      }
+
+      .fruit-card:hover {
+        transform: translateY(-5px);
+      }
+
+      .fruit-card img {
+        width: 100%;
+        height: 150px;
+        object-fit: cover;
+        border-radius: 8px;
+        margin-bottom: 15px;
+      }
+
+      .fruit-card h3 {
+        margin: 10px 0;
+        font-size: 18px;
+      }
+
+      .fruit-card .rating {
+        color: #ffc107;
+        margin-bottom: 10px;
+      }
+
+      .fruit-card p {
+        font-weight: bold;
+        color: var(--primary-color);
+        margin-bottom: 15px;
+      }
+
+      .fruit-card button {
+        background-color: var(--primary-color);
+        color: white;
+        border: none;
+        padding: 10px 20px;
+        border-radius: 25px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+      }
+
+      .fruit-card button:hover {
+        background-color: var(--secondary-color);
+      }
+
+      #messageContainer {
+        height: 300px;
+        overflow-y: auto;
+        border: 1px solid #ccc;
+        padding: 10px;
+        margin-bottom: 10px;
+        border-radius: 8px;
+      }
+
+      #messageInput {
+        width: 100%;
+        padding: 10px;
+        margin-bottom: 10px;
+        border: 1px solid #ccc;
+        border-radius: 8px;
+      }
+
+      @media (max-width: 768px) {
+        .app-container {
+          flex-direction: column;
+        }
+
+        .sidebar {
+          position: fixed;
+          left: -280px;
+          top: 0;
+          bottom: 0;
+          z-index: 1000;
+        }
+
+        .sidebar.open {
+          left: 0;
+        }
+
+        .close-sidebar,
+        .open-sidebar {
+          display: block;
+        }
+
+        .close-sidebar {
+          position: absolute;
+          right: 10px;
+          top: 10px;
+        }
+
+        .right-sidebar {
+          width: 100%;
+        }
+
+        .main-content {
+          margin-left: 0;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="app-container">
+      <!-- Sidebar -->
+      <div id="sidebar" class="sidebar">
+        <button id="closeSidebar" class="close-sidebar">
+          <i class="fas fa-times"></i>
+        </button>
+        <h1 class="logo"><i class="fas fa-apple-alt"></i> FruitEat</h1>
+        <nav>
+          <a href="#" class="nav-item active" data-tab="dashboard">
+            <i class="fas fa-home icon"></i>
+            Dashboard
+          </a>
+          <a href="#" class="nav-item" data-tab="foodOrder">
+            <i class="fas fa-shopping-basket icon"></i>
+            Fruit Order
+          </a>
+          <a href="#" class="nav-item" data-tab="message">
+            <i class="fas fa-comment-alt icon"></i>
+            Message
+          </a>
+          <a href="#" class="nav-item" data-tab="settings">
+            <i class="fas fa-cog icon"></i>
+            Settings
+          </a>
+        </nav>
+      </div>
+
+      <!-- Main Content -->
+      <div class="main-content">
+        <header>
+          <button id="openSidebar" class="open-sidebar">
+            <i class="fas fa-bars"></i>
+          </button>
+          <input
+            type="search"
+            id="searchInput"
+            placeholder="Search for fruits..."
+          />
+          <div class="header-icons">
+            <!-- <button id="notificationsButton"><i class="fas fa-bell"></i></button>
+                    <button id="settingsButton"><i class="fas fa-cog"></i></button> -->
+          </div>
+        </header>
+
+        <!-- Tab content will be dynamically inserted here -->
+        <div id="tabContent"></div>
+      </div>
+
+      <!-- Right Sidebar -->
+      <div class="right-sidebar">
+        <div class="balance-section">
+          <h2>Your Balance</h2>
+          <div class="balance-card">
+            <div id="balanceAmount" class="balance-amount">$12000.00</div>
+            <!-- <div class="balance-actions">
+                        <button id="topUpButton">Top Up</button>
+                        <button id="transferButton">Transfer</button>
+                    </div> -->
+          </div>
+        </div>
+
+        <div class="cart-section">
+          <h2>Your Cart</h2>
+          <div id="cartItems" class="cart-items"></div>
+          <div id="cartTotal" class="cart-total"></div>
+          <button id="checkoutButton" class="checkout-button">Checkout</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Modal -->
+    <div id="modal" class="modal">
+      <div class="modal-content">
+        <h2 id="modalTitle"></h2>
+        <p id="modalMessage"></p>
+        <button id="modalClose">Close</button>
+      </div>
+    </div>
+
+    <script>
+      // Sample data
+      const fruits = [
+        {
+          id: 1,
+          name: "Fresh Apple",
+          price: 5.59,
+          image:
+            "https://plus.unsplash.com/premium_photo-1663926032043-7908766f5c52?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTN8fGFwcGxlfGVufDB8fDB8fHww",
+          rating: 5,
+          category: "Apples"
+        },
+        {
+          id: 2,
+          name: "Organic Banana",
+          price: 5.59,
+          image:
+            "https://media.istockphoto.com/id/1494763483/photo/banana-concept.webp?a=1&b=1&s=612x612&w=0&k=20&c=NKgZvwkV4qwBdRPNyrUMVX2Xtczm65sT-_X5jEySQLg=&w=400",
+          rating: 5,
+          category: "Bananas"
+        },
+        {
+          id: 3,
+          name: "Sweet Orange",
+          price: 5.59,
+          image:
+            "https://media.istockphoto.com/id/1094072066/photo/fruit-in-the-tree-oranges-ripening.webp?a=1&b=1&s=612x612&w=0&k=20&c=4qYver9CVO_Vwr3pyvpNYjAsYhKBPOnj-s8ne2EV0AM=&q=80&w=400",
+          rating: 4,
+          category: "Citrus"
+        },
+        {
+          id: 4,
+          name: "Mixed Berries",
+          price: 5.59,
+          image:
+            "https://media.istockphoto.com/id/840546484/photo/mix-of-summer-berries.webp?a=1&b=1&s=612x612&w=0&k=20&c=YxjlDN2C9CsE320unuQ5nPyMVpVYV6StmZDGtroXCWA=&q=80&w=400",
+          rating: 5,
+          category: "Berries"
+        },
+        {
+          id: 5,
+          name: "Mango Pack",
+          price: 5.59,
+          image:
+            "https://media.istockphoto.com/id/1152750103/photo/sliced-alphonso-mangoes.webp?a=1&b=1&s=612x612&w=0&k=20&c=sQMp9sgpvT-TgAOdaGidzMcoIlsF4VAURQun6RhAB_Q=&q=80&w=400",
+          rating: 5,
+          category: "Tropical"
+        },
+        {
+          id: 6,
+          name: "Fresh Grapes",
+          price: 5.59,
+          image:
+            "https://media.istockphoto.com/id/803721418/photo/grape-dark-grape-grapes-with-leaves-isolated-with-clipping-path-full-depth-of-field.webp?a=1&b=1&s=612x612&w=0&k=20&c=5Fkl756UKR0h3IPfm2gVy5Gy2ipk2CeGEZ1XGLWeQB8=&q=80&w=400",
+          rating: 5,
+          category: "Others"
+        }
+      ];
+
+      const categories = [
+        { icon: "🍎", name: "Apples" },
+        { icon: "🍌", name: "Bananas" },
+        { icon: "🍊", name: "Citrus" },
+        { icon: "🍇", name: "Berries" },
+        { icon: "🥭", name: "Tropical" },
+        { icon: "🍐", name: "Others" }
+      ];
+
+      // State
+      let balance = 12000;
+      let cartItems = [];
+      let activeTab = "dashboard";
+      let selectedCategory = null;
+
+      // DOM Elements
+      const tabContent = document.getElementById("tabContent");
+      const searchInput = document.getElementById("searchInput");
+      const balanceAmount = document.getElementById("balanceAmount");
+      const cartItemsContainer = document.getElementById("cartItems");
+      const cartTotal = document.getElementById("cartTotal");
+      const checkoutButton = document.getElementById("checkoutButton");
+      const modal = document.getElementById("modal");
+      const modalTitle = document.getElementById("modalTitle");
+      const modalMessage = document.getElementById("modalMessage");
+      const modalClose = document.getElementById("modalClose");
+      const sidebar = document.getElementById("sidebar");
+      const openSidebarButton = document.getElementById("openSidebar");
+      const closeSidebarButton = document.getElementById("closeSidebar");
+
+      // Event Listeners
+      searchInput.addEventListener("input", renderFruits);
+      checkoutButton.addEventListener("click", handleCheckout);
+      modalClose.addEventListener(
+        "click",
+        () => (modal.style.display = "none")
+      );
+      openSidebarButton.addEventListener("click", () =>
+        sidebar.classList.add("open")
+      );
+      closeSidebarButton.addEventListener("click", () =>
+        sidebar.classList.remove("open")
+      );
+
+      document.querySelectorAll(".nav-item").forEach((item) => {
+        item.addEventListener("click", (e) => {
+          e.preventDefault();
+          setActiveTab(e.target.closest(".nav-item").dataset.tab);
+        });
+      });
+
+      // Functions
+      function setActiveTab(tab) {
+        activeTab = tab;
+        document.querySelectorAll(".nav-item").forEach((item) => {
+          item.classList.toggle("active", item.dataset.tab === tab);
+        });
+        renderTabContent();
+      }
+
+      function renderTabContent() {
+        switch (activeTab) {
+          case "dashboard":
+            renderDashboard();
+            break;
+          case "foodOrder":
+            renderFoodOrder();
+            break;
+          case "message":
+            renderMessage();
+            break;
+          case "settings":
+            renderSettings();
+            break;
+        }
+      }
+
+      function renderDashboard() {
+        tabContent.innerHTML = `
+                <h2>Dashboard</h2>
+                <div class="categories">
+                    ${categories
+                      .map(
+                        (category) => `
+                        <div class="category" onclick="setSelectedCategory('${category.name}')">
+                            <span>${category.icon}</span>
+                            <span>${category.name}</span>
+                        </div>
+                    `
+                      )
+                      .join("")}
+                </div>
+                <h3>Popular Fruits</h3>
+                <div class="fruits">
+                    ${renderFruitCards(fruits.slice(0, 3))}
+                </div>
+            `;
+      }
+
+      function renderFoodOrder() {
+        tabContent.innerHTML = `
+                <h2>Food Order</h2>
+                <select onchange="setSelectedCategory(this.value)">
+                    <option value="">All Categories</option>
+                    ${categories
+                      .map(
+                        (category) => `
+                        <option value="${category.name}">${category.name}</option>
+                    `
+                      )
+                      .join("")}
+                </select>
+                <div class="fruits">
+                    ${renderFruitCards(getFilteredFruits())}
+                </div>
+            `;
+      }
+
+      function renderMessage() {
+        tabContent.innerHTML = `
+                <h2>Messages</h2>
+                <div id="messageContainer"></div>
+                <textarea id="messageInput" placeholder="Type your message..."></textarea>
+                <button onclick="sendMessage()">Send</button>
+            `;
+      }
+
+      function renderSettings() {
+        tabContent.innerHTML = `
+                <h2>Settings</h2>
+                <form>
+                    <label for="name">Name</label>
+                    <input type="text" id="name" placeholder="Your Name">
+                    <label for="email">Email</label>
+                    <input type="email" id="email" placeholder="your.email@example.com">
+                    <label for="password">Password</label>
+                    <input type="password" id="password" placeholder="••••••••">
+                    <button type="button" onclick="saveSettings()">Save Changes</button>
+                </form>
+            `;
+      }
+
+      function renderFruitCards(fruits) {
+        return fruits
+          .map(
+            (fruit) => `
+                <div class="fruit-card">
+                    <img src="${fruit.image}" alt="${fruit.name}">
+                    <h3>${fruit.name}</h3>
+                    <div class="rating">${"★".repeat(fruit.rating)}${"☆".repeat(
+              5 - fruit.rating
+            )}</div>
+                    <p>$${fruit.price}</p>
+                    <button onclick="addToCart(${
+                      fruit.id
+                    })">Add to Cart</button>
+                </div>
+            `
+          )
+          .join("");
+      }
+
+      function getFilteredFruits() {
+        return fruits.filter(
+          (fruit) =>
+            fruit.name
+              .toLowerCase()
+              .includes(searchInput.value.toLowerCase()) &&
+            (!selectedCategory || fruit.category === selectedCategory)
+        );
+      }
+
+      function setSelectedCategory(category) {
+        selectedCategory = category;
+        renderFruits();
+      }
+
+      function renderFruits() {
+        const fruitContainer = document.querySelector(".fruits");
+        if (fruitContainer) {
+          fruitContainer.innerHTML = renderFruitCards(getFilteredFruits());
+        }
+      }
+
+      function addToCart(fruitId) {
+        const fruit = fruits.find((f) => f.id === fruitId);
+        if (fruit) {
+          cartItems.push(fruit);
+          updateCart();
+          showNotification(`Added ${fruit.name} to cart!`);
+        }
+      }
+
+      function updateCart() {
+        cartItemsContainer.innerHTML = cartItems
+          .map(
+            (item) => `
+                <div class="cart-item">
+                    <img src="${item.image}" alt="${item.name}">
+                    <span>${item.name}</span>
+                    <span>$${item.price}</span>
+                </div>
+            `
+          )
+          .join("");
+
+        const total = cartItems.reduce((sum, item) => sum + item.price, 0);
+        cartTotal.textContent = `Total: $${total.toFixed(2)}`;
+        checkoutButton.style.display = cartItems.length > 0 ? "block" : "none";
+      }
+
+      function handleCheckout() {
+        const total = cartItems.reduce((sum, item) => sum + item.price, 0);
+        if (balance >= total) {
+          balance -= total;
+          balanceAmount.textContent = `$${balance.toFixed(2)}`;
+          cartItems = [];
+          updateCart();
+          showModal("Checkout Successful", `Total: $${total.toFixed(2)}`);
+        } else {
+          showModal("Checkout Failed", "Insufficient balance");
+        }
+      }
+
+      function showModal(title, message) {
+        modalTitle.textContent = title;
+        modalMessage.textContent = message;
+        modal.style.display = "block";
+      }
+
+      function sendMessage() {
+        const messageInput = document.getElementById("messageInput");
+        const messageContainer = document.getElementById("messageContainer");
+        if (messageInput.value.trim()) {
+          messageContainer.innerHTML += `<p><strong>You:</strong> ${messageInput.value}</p>`;
+          messageInput.value = "";
+          // Simulate AI response
+          setTimeout(() => {
+            messageContainer.innerHTML += `<p><strong>AI:</strong> Thank you for your message. How can I assist you today?</p>`;
+            messageContainer.scrollTop = messageContainer.scrollHeight;
+          }, 1000);
+        }
+      }
+
+      function saveSettings() {
+        showModal(
+          "Settings Saved",
+          "Your changes have been saved successfully."
+        );
+      }
+
+      function showNotification(message) {
+        const notification = document.createElement("div");
+        notification.textContent = message;
+        notification.style.position = "fixed";
+        notification.style.bottom = "20px";
+        notification.style.right = "20px";
+        notification.style.backgroundColor = "var(--primary-color)";
+        notification.style.color = "white";
+        notification.style.padding = "10px 20px";
+        notification.style.borderRadius = "5px";
+        notification.style.boxShadow = "0 2px 5px rgba(0,0,0,0.2)";
+        notification.style.opacity = "0";
+        notification.style.transition = "opacity 0.3s ease";
+
+        document.body.appendChild(notification);
+
+        setTimeout(() => {
+          notification.style.opacity = "1";
+        }, 100);
+
+        setTimeout(() => {
+          notification.style.opacity = "0";
+          setTimeout(() => {
+            document.body.removeChild(notification);
+          }, 300);
+        }, 3000);
+      }
+
+      // Initial render
+      setActiveTab("dashboard");
+      updateCart();
+    </script>
+  </body>
+</html>
